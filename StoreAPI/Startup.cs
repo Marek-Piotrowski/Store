@@ -31,11 +31,15 @@ namespace StoreAPI
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+            // adding cors service
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // order here is very important
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -46,6 +50,12 @@ namespace StoreAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            // cors need to be after Routing
+            // adding our client site as a Cors friendly, our React App :)
+            app.UseCors(opt =>
+            {
+                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+            });
 
             app.UseAuthorization();
 
