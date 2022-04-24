@@ -1,6 +1,7 @@
 //import { List } from '@mui/icons-material';
 
 import { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import { Product } from '../../app/models/product';
 import ProductList from './ProductList';
 
@@ -18,8 +19,9 @@ export default function Catalog() {
 
     return (
         <>
-            <ProductList products={products }></ProductList>
-           
+            <ProductList products={products}></ProductList>
+
+
         </>
         )
 }

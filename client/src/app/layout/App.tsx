@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import  Catalog  from '../../features/catalog/Catalog';
 import { Container, createTheme, CssBaseline, ThemeProvider} from '@mui/material';
 import Header from './Header';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import HomePage from '../../features/Home/HomePage';
+import AboutPage from '../../features/About/AboutPage';
+import ContactPage from '../../features/Contact/ContactPage';
 
 export default function App() {
     const [darkMode, setDarkMode] = useState(false);
@@ -29,10 +33,16 @@ export default function App() {
       <ThemeProvider theme={theme }>
           <CssBaseline />
           <Header onChange={handleChange} darkMode={darkMode} />
+
           <Container>
-              <Catalog/>
+            <Routes>
+                    <Route path="/" element={<HomePage />} />
+            </Routes>
+            <Outlet />
+
           </Container>
-          
+
+
 
       </ThemeProvider>
     );
