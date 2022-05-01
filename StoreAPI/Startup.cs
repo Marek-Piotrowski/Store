@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StoreAPI.Data;
+using StoreAPI.Middleware;
 
 namespace StoreAPI
 {
@@ -39,10 +40,13 @@ namespace StoreAPI
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // our own exception handler
+            app.UseMiddleware<ExceptionMiddleware>();
+
             // order here is very important
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage(); we replaced it by our own exception handler
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
@@ -54,7 +58,7 @@ namespace StoreAPI
             // adding our client site as a Cors friendly, our React App :)
             app.UseCors(opt =>
             {
-                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
             });
 
             app.UseAuthorization();
