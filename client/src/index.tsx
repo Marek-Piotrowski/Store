@@ -11,24 +11,37 @@ import ProductDetails from './features/catalog/ProductDetails';
 import NoMatchPage from './features/NoMatchPage/NoMatchPage';
 import Login from './features/Login/Login';
 import Register from './features/Register/Register';
+import ServerError from './app/errors/ServerError';
+import BasketPage from './features/Basket/BasketPage';
+import { StoreProvider } from './app/context/StoreContext';
+import CheckoutPage from './features/Checkout/CheckoutPage';
+
+//export const history = createBrowserHistory();
 
 ReactDOM.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<App />} >
+        <BrowserRouter >
+            <StoreProvider>
+                <Routes>
 
-                    <Route path="catalog" element={<Catalog />} />
-                    <Route path="catalog/:id" element={<ProductDetails />} />
-                    <Route path="about" element={<AboutPage />} />
-                    <Route path="contact" element={<ContactPage />} />
-                    <Route path='login' element={<Login/>}/>
-                    <Route path='register' element={<Register/>}/>
-                    <Route path="*" element={<NoMatchPage/>} />
+                        <Route path="/" element={<App />} >
 
-                </Route>
+                            <Route path="catalog" element={<Catalog />} />
+                            <Route path="catalog/:id" element={<ProductDetails />} />
+                            <Route path="about" element={<AboutPage />} />
+                            <Route path="contact" element={<ContactPage />} />
+                            <Route path='login' element={<Login/>}/>
+                            <Route path='register' element={<Register/>}/>
+                            <Route path='server-error' element={<ServerError/>}/>
+                            <Route path='basket' element={<BasketPage/>}/>
+                            <Route path='checkout' element={<CheckoutPage/>}/>
+                            <Route path="*" element={<NoMatchPage/>} />
 
-            </Routes>
+                        </Route>
+
+
+                </Routes>
+            </StoreProvider>
         </BrowserRouter>
 
   </React.StrictMode>,

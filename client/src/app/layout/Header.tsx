@@ -2,6 +2,7 @@ import { AppBar, Badge, Box, FormControlLabel, FormGroup, IconButton, List, List
 import { Link as RouterLink, NavLink } from "react-router-dom";
 import Link from '@mui/material/Link';
 import { ShoppingCart } from "@mui/icons-material";
+import { useStoreContext } from "../context/StoreContext";
 
 interface Props {
     darkMode: boolean,
@@ -9,6 +10,9 @@ interface Props {
 }
 
 export default function Header({ onChange, darkMode }: Props) {
+    const {basket} = useStoreContext();
+    const itemCount = basket?.items.reduce((sum,item)=>sum + item.quantity, 0)
+
     return (
         <AppBar position="static" sx={{ mb: 2 }}>
             <Toolbar sx={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
@@ -66,8 +70,8 @@ export default function Header({ onChange, darkMode }: Props) {
                 </Box>
 
                 <Box sx={{display:"flex"}}>
-                    <IconButton size="large" color="inherit">
-                        <Badge badgeContent={4} color="secondary">
+                    <IconButton component={RouterLink} to="/basket" size="large" color="inherit">
+                        <Badge badgeContent={itemCount} color="secondary">
                             <ShoppingCart/>
                         </Badge>
                     </IconButton>
