@@ -1,31 +1,36 @@
 //import { List } from '@mui/icons-material';
 
-import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import agent from '../../app/api/agent';
+import { useEffect} from 'react';
+
 import Loading from '../../app/layout/Loading';
-import { Product } from '../../app/models/product';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
+import { fetchProductsAsync, productSelectors } from './catalogSlice';
 import ProductList from './ProductList';
 
 
 
 export default function Catalog() {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [loading, setLoading] = useState(true);
+    const products = useAppSelector(productSelectors.selectAll);
+    const dispatch = useAppDispatch();
+    const {productsLoaded,status} = useAppSelector(state => state.catalog);
 
     useEffect(() => {
+        if(!productsLoaded){
+            dispatch(fetchProductsAsync())
+        }
+
         // new way with axios self created agent
-        agent.catalog.list().then(products => setProducts(products))
-        .catch(error => console.log(error))
-        .finally(()=> setLoading(false))
+        // agent.catalog.list().then(products => setProducts(products))
+        // .catch(error => console.log(error))
+        // .finally(()=> setLoading(false))
 
         // fetch('https://localhost:7271/api/Products')
         //     .then(res => res.json())
         //     .then(data => setProducts(data))
 
-    }, []);
+    }, [productsLoaded]);
 
-    if(loading){
+    if(status.includes("pending")){
         return <Loading message="Loading products..."/>
     }
 

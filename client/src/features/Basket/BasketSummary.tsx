@@ -1,10 +1,11 @@
-import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
-import { useStoreContext } from "../../app/context/StoreContext";
+import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from "@mui/material";
+//import { useStoreContext } from "../../app/context/StoreContext";
+import { useAppSelector } from "../../app/store/configureStore";
 import { currencyFormat } from "../../app/utils/util";
 
 export default function BasketSummary() {
 
-    const{basket} = useStoreContext();
+    const{basket} = useAppSelector(state => state.basket);
     //if this return undefined ?? return 0 // needed for correct subtotal
     const subtotal = basket?.items.reduce((sum,item)=> sum+ (item.quantity* item.price),0) ?? 0;
     // from $ 100 delivery free or $5

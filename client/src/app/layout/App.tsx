@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import  Catalog  from '../../features/catalog/Catalog';
+import { useEffect, useState } from 'react';
 import { Container, createTheme, CssBaseline, ThemeProvider} from '@mui/material';
 import Header from './Header';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
 import HomePage from '../../features/Home/HomePage';
-import AboutPage from '../../features/About/AboutPage';
-import ContactPage from '../../features/Contact/ContactPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useStoreContext } from '../context/StoreContext';
+//import { useStoreContext } from '../context/StoreContext';
 import { getCookie } from '../utils/util';
 import agent from '../api/agent';
 import Loading from './Loading';
+import { useAppDispatch} from '../store/configureStore';
+import { setBasket } from '../../features/Basket/BasketSlice';
 
 export default function App() {
-    const{setBasket} = useStoreContext();
+    //const{setBasket} = useStoreContext();
+
+    const dispatch = useAppDispatch();
     const[loading,setLoading] = useState(true);
 
     const [darkMode, setDarkMode] = useState(false);
@@ -40,14 +41,14 @@ export default function App() {
         const buyerId = getCookie("buyerId");
         if(buyerId){
             agent.Basket.get()
-            .then(basket=> setBasket(basket))
+            .then(basket=> dispatch(setBasket(basket)))
             .catch(error=> console.log(error))
             .finally(()=> setLoading(false))
         }
         else{
             setLoading(false);
         }
-    }, [darkMode,setBasket]);
+    }, [darkMode,dispatch]);
 
     if(loading) return <Loading message='Initialising app...'/>
 

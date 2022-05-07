@@ -2,22 +2,25 @@ import { LoadingButton } from "@mui/lab";
 import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import { useState,useEffect } from "react";
 import { useParams } from "react-router-dom"
-import agent from "../../app/api/agent";
-import { useStoreContext } from "../../app/context/StoreContext";
 import Loading from "../../app/layout/Loading";
 import { Product } from "../../app/models/product";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { addBasketItemAsync, removeBasketItemAsync} from "../Basket/BasketSlice";
+import { fetchProductAsync, productSelectors } from "./catalogSlice";
 
 
 export default function ProductDetails() {
 
-    const{basket, setBasket, removeItem} = useStoreContext();
+    const{basket,status} = useAppSelector(state => state.basket);
+    const dispatch = useAppDispatch();
 
     const {id} = useParams<{id: string}>();
-    const[product, setProduct] = useState<Product | null>();
-    const[loading, setLoading] = useState(true);
+    const product = useAppSelector(state => productSelectors.selectById(state, id!));
+
     const[quantity,setQuantity] = useState(0);
     // secondary loading flag
-    const[submitting, setSubmitting] = useState(false);
+    const {status: productStatus} = useAppSelector(state =>state.catalog)
+
     const item = basket?.items.find(i=> i.productId === product?.id);
 
 
@@ -27,13 +30,15 @@ export default function ProductDetails() {
         if(item) setQuantity(item.quantity);
         //axios.get(`https://localhost:7271/api/Products/${id}`)
 
-        agent.catalog.details(Number(id))
-        .then(res => setProduct(res))
-        .catch(error => console.log(error))
-        .finally(()=>setLoading(false))
+        if(!product) dispatch(fetchProductAsync(Number(id)))
+
+        // agent.catalog.details(Number(id))
+        // .then(res => setProduct(res))
+        // .catch(error => console.log(error))
+        // .finally(()=>setLoading(false))
 
 
-    }, [id,item]);
+    }, [id,item,product,dispatch]);
 
     function handleInputChange(event: any){
         // dont allow to go below zero in value
@@ -44,24 +49,18 @@ export default function ProductDetails() {
     }
 
     function handleUpdateCart(){
-        setSubmitting(true);
+
         if(!item || quantity > item.quantity){
             const updatedQuantity = item ? quantity - item.quantity : quantity;
-            agent.Basket.addItem(product?.id!, updatedQuantity)
-            .then(basket => setBasket(basket) )
-            .catch(error => console.log(error))
-            .finally(()=> setSubmitting(false))
+            dispatch(addBasketItemAsync({productId: product?.id! ,quantity: updatedQuantity}));
         }
         else{
             const updatedQuantity = item.quantity - quantity;
-            agent.Basket.removeItem(product?.id!, updatedQuantity)
-            .then(()=> removeItem(product?.id!, updatedQuantity))
-            .catch(error=> console.log(error))
-            .finally(()=> setSubmitting(false))
+            dispatch(removeBasketItemAsync({productId: product?.id! ,quantity: updatedQuantity}));
         }
     }
 
-    if(loading) return <Loading message="Loading product..."/>
+    if(productStatus.includes("pending")) return <Loading message="Loading product..."/>
 
     if(!product) return <h3>Product not found</h3>
 
@@ -119,7 +118,7 @@ export default function ProductDetails() {
                     <Grid item xs={6}>
                         <LoadingButton
                             disabled={item?.quantity === quantity || !item && quantity === 0 }
-                            loading={submitting}
+                            loading={status.includes("pending")}
                             sx={{height: "55px"}}
                             color="primary"
                             size="large"

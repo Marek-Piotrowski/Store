@@ -13,15 +13,17 @@ import Login from './features/Login/Login';
 import Register from './features/Register/Register';
 import ServerError from './app/errors/ServerError';
 import BasketPage from './features/Basket/BasketPage';
-import { StoreProvider } from './app/context/StoreContext';
+//import { StoreProvider } from './app/context/StoreContext';
 import CheckoutPage from './features/Checkout/CheckoutPage';
+import { store } from './app/store/configureStore';
+import { Provider } from 'react-redux'
 
 //export const history = createBrowserHistory();
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter >
-            <StoreProvider>
+            <Provider store={store}>
                 <Routes>
 
                         <Route path="/" element={<App />} >
@@ -41,7 +43,7 @@ ReactDOM.render(
 
 
                 </Routes>
-            </StoreProvider>
+            </Provider>
         </BrowserRouter>
 
   </React.StrictMode>,
