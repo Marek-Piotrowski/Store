@@ -48,7 +48,6 @@ namespace StoreAPI.Extensions
                 //add typed brand at the end of a list by AddRange method
                 brandList.AddRange(brands.ToLower().Split(",").ToList());
             }
-               
 
             // if types are not empty
             if (!string.IsNullOrWhiteSpace(types))
@@ -56,8 +55,6 @@ namespace StoreAPI.Extensions
                 // retrive type list
                 typeList.AddRange(types.ToLower().Split(",").ToList());
             }
-               
-            
 
 
             // we do chain query here, just adding more
