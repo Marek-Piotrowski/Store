@@ -10,13 +10,13 @@ interface Props {
 
 export default function ProductList({ products }: Props) {
     return (
-        <Grid container spacing={3} >
+        <Grid container spacing={4} >
             {products.map((item: Product) => (
-                <Grid item xs={3} key={item.id} >
+                <Grid item xs={4} key={item.id} >
                     <ProductCard  product={item} />
                 </Grid >
-                
+
             ))}
         </Grid>
-    )    
+    )
 }

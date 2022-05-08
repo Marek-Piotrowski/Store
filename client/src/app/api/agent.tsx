@@ -61,15 +61,16 @@ axios.interceptors.response.use(response => {
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-    get:(url: string) => axios.get(url).then(responseBody),
+    get:(url: string, params?: URLSearchParams) => axios.get(url,{params}).then(responseBody),
     post:(url: string, body:{}) => axios.post(url,body).then(responseBody),
     put:(url: string, body:{}) => axios.put(url,body).then(responseBody),
     delete:(url: string) => axios.delete(url).then(responseBody),
 }
 
 const catalog = {
-    list: () => requests.get("Products"),
-    details: (id: number)=> requests.get(`Products/${id}`)
+    list: (params: URLSearchParams) => requests.get("Products",params),
+    details: (id: number)=> requests.get(`Products/${id}`),
+    fetchFilters: () => requests.get("Products/filters")
 }
 
 const testErrors = {
