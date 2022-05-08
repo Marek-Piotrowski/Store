@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using StoreAPI.Data;
 using StoreAPI.Entities;
+using StoreAPI.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,13 +20,19 @@ namespace StoreAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<List<Product>>> GetProducts(string orderBy,
+            string searchTerm, string brands, string types)
         {
-            return  await _context.Products.ToListAsync();
+            // we implement our extension metod Sort,Search, Filter to sort first and then return 
+            var query =  _context.Products
+                .Sort(orderBy)
+                .Search(searchTerm)
+                .Filter(brands, types)
+                .AsQueryable();
 
-            // before var products = context.Products.....
-            // return http response 200
-            //return Ok(products);
+            // now return data, after all criteria
+            return await query.ToListAsync();
+
         }
 
         // api/products/3
