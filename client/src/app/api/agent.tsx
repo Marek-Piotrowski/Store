@@ -1,6 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { PaginatedResponse } from "../models/pagination";
 
 axios.defaults.baseURL = "https://localhost:7271/api/";
 // to set a cookie from our client side, this is for cors purpose.
@@ -20,6 +21,13 @@ const redirect = () => new Promise(res => {
 
 // we are caching the response
 axios.interceptors.response.use(response => {
+
+    const pagination = response.headers['pagination'];
+    if(pagination){
+        response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+        //console.log(response)
+        return response;
+    }
     return response;
 }, (error: AxiosError) =>{
     // ! na koncu nadpisuje typescript z bledem, czasem warto z tego korzystac, bo nie mamy 100% pokrycia kody typscriptem. W tym przypadku wiemy jaki typ otrzymamy, ze bedzie to typ bledu
