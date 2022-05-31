@@ -99,6 +99,7 @@ export default function Catalog() {
             </Grid>
             {/* takes 1/4 av space. 3 from 12 columns*/}
             <Grid item xs={3}/>
+            {/* bottom empty space*/}
             {/* takes 3/4 av space. 9 from 12 columns*/}
             <Grid item xs={9}>
                 <Box display="flex" justifyContent="space-between" alignItems="center">
