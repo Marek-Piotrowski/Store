@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StoreAPI.Data;
+using StoreAPI.Entities;
 
 namespace StoreAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             // remove Run method
             var host = CreateHostBuilder(args).Build();
@@ -22,15 +24,17 @@ namespace StoreAPI
             using var scope = host.Services.CreateScope();
             // provide with context
             var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
+            // implement roles
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
             try
             {
                 // here we create our database
-                context.Database.Migrate();
+                await context.Database.MigrateAsync();
                 // add products to database
-                DbInitializer.Initialize(context);
+                await DbInitializer.Initialize(context, userManager);
             }
             catch(Exception ex)
             {
@@ -41,7 +45,7 @@ namespace StoreAPI
                 context.Dispose(); 
             }*/
 
-            host.Run();
+            await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

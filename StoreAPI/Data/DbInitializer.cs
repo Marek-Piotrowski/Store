@@ -1,13 +1,38 @@
-﻿using StoreAPI.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using StoreAPI.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace StoreAPI.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(StoreContext context)
+        public static async Task Initialize(StoreContext context, UserManager<User> userManager)
         {
+            // if there is no users in the database
+            if (!userManager.Users.Any())
+            {
+                var user = new User()
+                {
+                    UserName = "Anders",
+                    Email = "anders@test.com"
+                };
+
+                await userManager.CreateAsync(user, "Kalabanga##12");
+                await userManager.AddToRoleAsync(user, "Member");
+
+                var admin = new User()
+                {
+                    UserName = "admin",
+                    Email = "admin@test.com"
+                };
+
+                await userManager.CreateAsync(admin, "Kalabanga##12");
+                await userManager.AddToRolesAsync(admin, new[] { "Member", "Admin" } );
+
+
+            }
             //database contains products allready, just return, if empty continue
             if (context.Products.Any()) return;
 
