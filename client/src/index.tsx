@@ -10,8 +10,8 @@ import AboutPage from './features/About/AboutPage';
 import ContactPage from './features/Contact/ContactPage';
 import ProductDetails from './features/catalog/ProductDetails';
 import NoMatchPage from './features/NoMatchPage/NoMatchPage';
-import Login from './features/Login/Login';
-import Register from './features/Register/Register';
+import Login from './features/Account/Login';
+import Register from './features/Account/Register';
 import ServerError from './app/errors/ServerError';
 import BasketPage from './features/Basket/BasketPage';
 //import { StoreProvider } from './app/context/StoreContext';
@@ -39,6 +39,8 @@ root.render(
                             <Route path='server-error' element={<ServerError/>}/>
                             <Route path='basket' element={<BasketPage/>}/>
                             <Route path='checkout' element={<CheckoutPage/>}/>
+                            {/* <Route path='login' element={<Login/>}/>
+                            <Route path='register' element={<Register/>}/> */}
                             <Route path="*" element={<NoMatchPage/>} />
 
                         </Route>

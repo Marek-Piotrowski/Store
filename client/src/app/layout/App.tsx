@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Container, createTheme, CssBaseline, ThemeProvider} from '@mui/material';
 import Header from './Header';
 import { Outlet, Route, Routes } from 'react-router-dom';
@@ -10,7 +10,8 @@ import { getCookie } from '../utils/util';
 import agent from '../api/agent';
 import Loading from './Loading';
 import { useAppDispatch} from '../store/configureStore';
-import { setBasket } from '../../features/Basket/BasketSlice';
+import { fetchBasketAsync, setBasket } from '../../features/Basket/BasketSlice';
+import { fetchCurrentUser } from '../../features/Account/AccountSlice';
 
 export default function App() {
     //const{setBasket} = useStoreContext();
@@ -36,19 +37,31 @@ export default function App() {
         setDarkMode(!darkMode);
     }
 
+    const initApp = useCallback(async() => {
+        try{
+            await dispatch(fetchCurrentUser());
+            await dispatch(fetchBasketAsync());
+        }catch(error){
+            console.log(error);
+        }
+    }, [dispatch])
+
 
     useEffect(() => {
-        const buyerId = getCookie("buyerId");
-        if(buyerId){
-            agent.Basket.get()
-            .then(basket=> dispatch(setBasket(basket)))
-            .catch(error=> console.log(error))
-            .finally(()=> setLoading(false))
-        }
-        else{
-            setLoading(false);
-        }
-    }, [darkMode,dispatch]);
+        initApp()
+        .then(()=> setLoading(false));
+        // const buyerId = getCookie("buyerId");
+        // dispatch(fetchCurrentUser());
+        // if(buyerId){
+        //     agent.Basket.get()
+        //     .then(basket=> dispatch(setBasket(basket)))
+        //     .catch(error=> console.log(error))
+        //     .finally(()=> setLoading(false))
+        // }
+        // else{
+        //     setLoading(false);
+        // }
+    }, [darkMode,initApp]);
 
     if(loading) return <Loading message='Initialising app...'/>
 

@@ -4,6 +4,7 @@ import Link from '@mui/material/Link';
 import { ShoppingCart } from "@mui/icons-material";
 import { useStoreContext } from "../context/StoreContext";
 import { useAppSelector } from "../store/configureStore";
+import SignedInMenu from "./SignedInMenu";
 
 interface Props {
     darkMode: boolean,
@@ -12,6 +13,7 @@ interface Props {
 
 export default function Header({ onChange, darkMode }: Props) {
     const {basket} = useAppSelector(state=> state.basket);
+    const {user} = useAppSelector(state=> state.account);
 
     const itemCount = basket?.items.reduce((sum,item)=>sum + item.quantity, 0)
 
@@ -77,7 +79,10 @@ export default function Header({ onChange, darkMode }: Props) {
                             <ShoppingCart/>
                         </Badge>
                     </IconButton>
-                    <List sx={{display:"flex"}}>
+                    { user ? (
+                        <SignedInMenu/>
+                    ) : (
+                        <List sx={{display:"flex"}}>
                         <ListItem >
                                 <Link
                                     component={RouterLink}
@@ -101,6 +106,8 @@ export default function Header({ onChange, darkMode }: Props) {
                                 </Link>
                         </ListItem>
                     </List>
+                    ) }
+
                 </Box>
             </Toolbar>
 
