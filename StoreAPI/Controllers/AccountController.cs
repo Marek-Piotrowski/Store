@@ -61,8 +61,9 @@ namespace StoreAPI.Controllers
                 {
                     ModelState.AddModelError(error.Code, error.Description);
 
-                    return ValidationProblem();
                 }
+
+                return ValidationProblem();
             }
 
             await _userManager.AddToRoleAsync(user, "Member");
