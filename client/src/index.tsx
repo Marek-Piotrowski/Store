@@ -18,6 +18,7 @@ import BasketPage from './features/Basket/BasketPage';
 import CheckoutPage from './features/Checkout/CheckoutPage';
 import { store } from './app/store/configureStore';
 import { Provider } from 'react-redux'
+import PrivateRoute from './app/layout/PrivateRoute';
 
 //export const history = createBrowserHistory();
 const container = document.getElementById('root');
@@ -38,9 +39,13 @@ root.render(
                             <Route path='register' element={<Register/>}/>
                             <Route path='server-error' element={<ServerError/>}/>
                             <Route path='basket' element={<BasketPage/>}/>
-                            <Route path='checkout' element={<CheckoutPage/>}/>
-                            {/* <Route path='login' element={<Login/>}/>
-                            <Route path='register' element={<Register/>}/> */}
+
+                            <Route path='checkout' element={
+                                 <PrivateRoute >
+                                     <CheckoutPage/>
+                                 </PrivateRoute>}>
+                            </Route>
+
                             <Route path="*" element={<NoMatchPage/>} />
 
                         </Route>

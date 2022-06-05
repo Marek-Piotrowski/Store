@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import { Paper } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import agent from '../../app/api/agent';
 import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
@@ -31,9 +31,16 @@ export default function Login() {
     })
 
     async function submitForm(data: FieldValues){
-        // no need for try catch, thunk api handle this
+      try{
+
         await dispatch(signInUser(data));
         navigate("/catalog");
+
+      }catch(error){
+        console.log(error)
+      }
+        // no need for try catch, thunk api handle this
+
 
 
     }

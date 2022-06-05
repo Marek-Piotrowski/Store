@@ -19,6 +19,7 @@ import { LoadingButton } from '@mui/lab';
 import { useAppDispatch } from '../../app/store/configureStore';
 import { signInUser } from './AccountSlice';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 
 //const theme = createTheme();
@@ -26,10 +27,25 @@ import { useState } from 'react';
 export default function Register() {
     const navigate = useNavigate();
     const [validationErrors, setValidationErrors] = useState([]);
-    const {register, handleSubmit, formState: {isSubmitting, errors, isValid}} = useForm({
+    const {register, handleSubmit, setError, formState: {isSubmitting, errors, isValid}} = useForm({
         mode: "all"
     })
 
+    function handleApiErrors(errors: any){
+      if(errors){
+        errors.forEach((error: string) => {
+          if(error.includes("Password")){
+            setError("password", {message: error})
+          }
+          else if(error.includes("Email")){
+            setError("email", {message: error})
+          }
+          else if(error.includes("Username")){
+            setError("username", {message: error})
+          }
+        } )
+      }
+    }
 
   return (
 
@@ -42,7 +58,13 @@ export default function Register() {
             Register
           </Typography>
           <Box component="form"
-          onSubmit={handleSubmit((data)=> agent.Account.register(data).catch(error => setValidationErrors(error)))}
+          onSubmit={handleSubmit((data)=> agent.Account
+            .register(data)
+            .then(()=>{
+              toast.success("Registration successful");
+              navigate("/login");
+            })
+            .catch(error => handleApiErrors(error)))}
           noValidate
           sx={{ mt: 1 }}>
             <TextField
@@ -58,7 +80,14 @@ export default function Register() {
               margin="normal"
               fullWidth
               label="Email address"
-              {...register("email", {required: "Email is required"})}
+              {...register("email",
+               {required: "Email is required",
+                pattern: {
+                  value: /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
+                  message: "Not a valid email"
+                }
+              }
+               )}
               error={!!errors.email}
               helperText={errors?.email?.message}
             />
@@ -69,28 +98,19 @@ export default function Register() {
             //   name="password"
               label="Password"
               type="password"
-              {...register("password",{required: "Password is required"})}
+              {...register("password",{
+                required: "Password is required",
+                pattern: {
+                  value: /^[a-zA-Z]\w{3,14}$/, // regexLib
+                  message: "Not a valid password"
+                }
+              })}
               error={!!errors.password}
               helperText={errors?.password?.message}
             //   onChange={handleInputChange}
             //   value={values.password}
             />
-            {validationErrors.length > 0 &&
-                <Alert severity="error">
-                    <AlertTitle>
-                        Validation errors
-                    </AlertTitle>
-                    <List>
-                        {validationErrors.map((error)=> (
-                            <ListItem key={error}>
-                                <ListItemText>
-                                    {error}
-                                </ListItemText>
-                            </ListItem>
-                        ) )}
-                    </List>
-                </Alert>
-            }
+
             <LoadingButton
               loading={isSubmitting}
               disabled={!isValid}

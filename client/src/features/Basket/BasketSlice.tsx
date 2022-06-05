@@ -61,6 +61,9 @@ export const BasketSlice = createSlice({
         setBasket: (state, action) => {
             state.basket = action.payload
         },
+        clearBasket: (state) => {
+            state.basket = null;
+        }
         // removeItem: (state,action)=> {
         //     const {productId,quantity} = action.payload
         //     const itemIndex = state.basket?.items.findIndex(i=>i.productId === productId);
@@ -105,4 +108,4 @@ export const BasketSlice = createSlice({
     })
 })
 
-export const {setBasket} = BasketSlice.actions;
+export const {setBasket,clearBasket} = BasketSlice.actions;

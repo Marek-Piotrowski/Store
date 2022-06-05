@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import agent from "../../app/api/agent";
 import { User } from "../../app/models/user";
+import { setBasket } from "../Basket/BasketSlice";
 
 interface AccountState{
     user: User | null,
@@ -21,7 +22,14 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
     "account/signInUser",
     async(data, thunkAPI) => {
         try{
-            const user = await agent.Account.login(data);
+            const userDto = await agent.Account.login(data);
+            // we are extracting basket, and rest of preperties as a user
+            const {basket, ...user} = userDto;
+            //if basket exists than set that basket as a logged in user basket
+            if(basket){
+                thunkAPI.dispatch(setBasket(basket));
+            }
+
             localStorage.setItem("user",JSON.stringify(user));
             return user;
 
@@ -38,7 +46,12 @@ export const fetchCurrentUser = createAsyncThunk<User>(
         thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));
 
         try{
-            const user = await agent.Account.currentUser();
+            const userDto = await agent.Account.currentUser();
+            const {basket, ...user} = userDto;
+            //if basket exists than set that basket as a logged in user basket
+            if(basket){
+                thunkAPI.dispatch(setBasket(basket));
+            }
             localStorage.setItem("user",JSON.stringify(user));
             return user;
 
@@ -81,7 +94,7 @@ export const AccountSlice = createSlice({
             state.user = action.payload;
         });
         builder.addMatcher(isAnyOf(signInUser.rejected), (state,action)=> {
-            console.log(action.payload);
+            throw action.payload;
         })
     }
 })
