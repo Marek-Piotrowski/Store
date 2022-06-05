@@ -74,7 +74,7 @@ namespace StoreAPI
                 // will not allow for double emails in database
                 opt.User.RequireUniqueEmail = true;
             })
-                .AddRoles<IdentityRole>()
+                .AddRoles<Role>()
                 .AddEntityFrameworkStores<StoreContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
