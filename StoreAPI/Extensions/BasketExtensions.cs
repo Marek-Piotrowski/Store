@@ -1,4 +1,5 @@
-﻿using StoreAPI.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using StoreAPI.DTOs;
 using StoreAPI.Entities;
 using System.Linq;
 
@@ -24,6 +25,11 @@ namespace StoreAPI.Extensions
                 }).ToList(),
 
             };
+        }
+
+        public static IQueryable<Basket> RetriveBasketWithItems(this IQueryable<Basket> query, string buyerId)
+        {
+            return query.Include(i => i.Items).ThenInclude(p => p.Product).Where(b => b.BuyerId == buyerId);
         }
     }
 }

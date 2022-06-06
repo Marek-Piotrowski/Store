@@ -19,6 +19,7 @@ import CheckoutPage from './features/Checkout/CheckoutPage';
 import { store } from './app/store/configureStore';
 import { Provider } from 'react-redux'
 import PrivateRoute from './app/layout/PrivateRoute';
+import Orders from './features/Orders/Orders';
 
 //export const history = createBrowserHistory();
 const container = document.getElementById('root');
@@ -45,6 +46,12 @@ root.render(
                                      <CheckoutPage/>
                                  </PrivateRoute>}>
                             </Route>
+                            <Route path='orders' element={
+                                 <PrivateRoute >
+                                     <Orders/>
+                                 </PrivateRoute>}>
+                            </Route>
+
 
                             <Route path="*" element={<NoMatchPage/>} />
 
