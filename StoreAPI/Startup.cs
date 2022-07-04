@@ -95,6 +95,8 @@ namespace StoreAPI
             services.AddAuthorization();
 
             services.AddScoped<TokenService>();
+            // adding Stripe service
+            services.AddScoped<PaymentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
