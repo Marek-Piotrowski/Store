@@ -101,7 +101,7 @@ export default function Register() {
               {...register("password",{
                 required: "Password is required",
                 pattern: {
-                  value: /^[a-zA-Z]\w{3,14}$/, // regexLib
+                  value: /^.{4,8}$/, // regexLib
                   message: "Not a valid password"
                 }
               })}
