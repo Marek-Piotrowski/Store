@@ -20,6 +20,7 @@ import { store } from './app/store/configureStore';
 import { Provider } from 'react-redux'
 import PrivateRoute from './app/layout/PrivateRoute';
 import Orders from './features/Orders/Orders';
+import { CheckoutWrapper } from './features/Checkout/CheckoutWrapper';
 
 //export const history = createBrowserHistory();
 const container = document.getElementById('root');
@@ -43,7 +44,7 @@ root.render(
 
                             <Route path='checkout' element={
                                  <PrivateRoute >
-                                     <CheckoutPage/>
+                                     <CheckoutWrapper/>
                                  </PrivateRoute>}>
                             </Route>
                             <Route path='orders' element={
