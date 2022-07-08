@@ -131,6 +131,8 @@ namespace StoreAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                /* controller to map any route that dont match our api */
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
