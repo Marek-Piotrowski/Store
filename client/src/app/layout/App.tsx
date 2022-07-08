@@ -70,11 +70,11 @@ export default function App() {
           <ToastContainer theme='colored' position='bottom-right' hideProgressBar/>
             <CssBaseline />
             <Header onChange={handleChange} darkMode={darkMode} />
-
-            <Container>
                 <Routes>
                         <Route path="/" element={<HomePage />} />
                 </Routes>
+            <Container sx={{ mt: 2 }}>
+
                 <Outlet />
 
             </Container>

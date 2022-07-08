@@ -21,6 +21,8 @@ import { Provider } from 'react-redux'
 import PrivateRoute from './app/layout/PrivateRoute';
 import Orders from './features/Orders/Orders';
 import { CheckoutWrapper } from './features/Checkout/CheckoutWrapper';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 //export const history = createBrowserHistory();
 const container = document.getElementById('root');

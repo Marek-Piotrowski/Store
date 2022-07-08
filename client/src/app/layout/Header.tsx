@@ -18,7 +18,7 @@ export default function Header({ onChange, darkMode }: Props) {
     const itemCount = basket?.items.reduce((sum,item)=>sum + item.quantity, 0)
 
     return (
-        <AppBar position="static" sx={{ mb: 2 }}>
+        <AppBar position="static" >
             <Toolbar sx={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
                 <Box sx={{display:"flex"}}>
                     <Link
