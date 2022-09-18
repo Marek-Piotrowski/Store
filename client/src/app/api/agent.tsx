@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { PaginatedResponse } from "../models/pagination";
 import { store } from "../store/configureStore";
 
-axios.defaults.baseURL = "https://localhost:7271/api/";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 // to set a cookie from our client side, this is for cors purpose.
 // we have added it also on the API side -> Startup.cs-> AllowCredentials()
 axios.defaults.withCredentials = true;

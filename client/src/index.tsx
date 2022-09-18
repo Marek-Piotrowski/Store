@@ -1,6 +1,6 @@
 import React from 'react';
 //import ReactDOM from 'react-dom';
-import { createRoot } from 'react-dom/client';
+import * as ReactDOMClient from 'react-dom/client';
 import './app/layout/styles.css';
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
@@ -26,7 +26,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 //export const history = createBrowserHistory();
 const container = document.getElementById('root');
-const root = createRoot(container!);
+const root = ReactDOMClient.createRoot(container!);
 root.render(
     <React.StrictMode>
         <BrowserRouter >
