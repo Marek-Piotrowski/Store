@@ -28,7 +28,7 @@ export default function HomePage() {
                 </div>
            </Slider>
            <Box display="flex" justifyContent="center" sx={{p: 4}}>
-                <Typography variant="h1">
+                <Typography variant="h2">
                     For snowboard lovers!
                 </Typography>
            </Box>
