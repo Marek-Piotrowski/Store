@@ -19,7 +19,7 @@ export default function Header({ onChange, darkMode }: Props) {
 
     return (
         <AppBar position="static" >
-            <Toolbar sx={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+            <Toolbar sx={{display:"flex", justifyContent:"space-between", alignItems:"center", width: "100%"}}>
                 <Box sx={{display:"flex"}}>
                     <Link
                     component={RouterLink}
